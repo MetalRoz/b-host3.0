@@ -1,9 +1,17 @@
 import React from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const EventsLive = ({ item, index, navigation }: any) => {
   return (
-    <TouchableOpacity key={index} style={styles.eventCard} onPress={() => navigation.navigate("Event")}>
+    <TouchableOpacity
+      key={index}
+      style={styles.eventCard}
+      onPress={async () => {
+        await AsyncStorage.setItem("event_data", JSON.stringify(item));
+        navigation.navigate("Dashboard");
+      }}
+    >
       <View style={styles.eventBadgeContainer}>
         <View style={styles.eventBadge}>
           <Text style={styles.eventNumber}>{item.EVENT_ORDERD_TICKETS}</Text>

@@ -25,6 +25,7 @@ interface EventData {
   event_start_datetime: string;
   EVENT_TOTAL_TICKETS: number;
   EVENT_ORDERD_TICKETS: number;
+  event_unique_id: any;
 }
 
 export default function Events({ navigation }: any) {
@@ -77,7 +78,7 @@ export default function Events({ navigation }: any) {
 
     if (activeTab === "live") {
       return data.map((item, index) => (
-        <EventsLive key={index} item={item} index={index}></EventsLive>
+        <EventsLive key={index} item={item} index={index} navigation={navigation}></EventsLive>
       ));
     }
 
@@ -98,7 +99,7 @@ export default function Events({ navigation }: any) {
         />
         <VStack space="2xl">
           <HStack space="md">
-            <Pressable onPress={() => navigation.navigate('User')}>
+            <Pressable onPress={() => navigation.navigate('User', {test: 123})}>
             <Avatar bgColor="$indigo600">
               <Icon as={User} color="white" size="lg" />
             </Avatar>

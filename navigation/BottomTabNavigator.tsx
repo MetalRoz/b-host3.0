@@ -1,22 +1,28 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Event from "../pages/Event";
+import Dashboard from "../pages/Dashboard";
 import Orders from "../pages/Orders";
 import UserProfile from "../pages/User";
 import { Icon } from "@gluestack-ui/themed";
-import { HomeIcon, ListOrdered, QrCodeIcon, Settings } from "lucide-react-native";
+import {
+  HomeIcon,
+  QrCodeIcon,
+  ScrollTextIcon,
+  Settings,
+} from "lucide-react-native";
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
+const MyTabs = () => {
+  
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Inicio"
-        component={Event}
+        component={Dashboard}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon as={HomeIcon} color={color} size="md" />
+            <Icon as={HomeIcon} color={color} size="xl" />
           ),
         }}
       />
@@ -25,7 +31,7 @@ const BottomTabNavigator = () => {
         component={Orders}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon as={QrCodeIcon} color={color} size="md" />
+            <Icon as={QrCodeIcon} color={color} size="xl" />
           ),
         }}
       />
@@ -34,7 +40,7 @@ const BottomTabNavigator = () => {
         component={Orders}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon as={ListOrdered} color={color} size="md" />
+            <Icon as={ScrollTextIcon} color={color} size="xl" />
           ),
         }}
       />
@@ -43,15 +49,17 @@ const BottomTabNavigator = () => {
         component={UserProfile}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon
-              as={Settings}
-              color={color}
-              size="md"
-            />
+            <Icon as={Settings} color={color} size="xl" />
           ),
         }}
       />
     </Tab.Navigator>
+  );
+};
+
+const BottomTabNavigator = () => {
+  return (
+      <MyTabs></MyTabs>
   );
 };
 
