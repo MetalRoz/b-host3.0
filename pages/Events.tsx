@@ -31,8 +31,8 @@ interface EventData {
 export default function Events({ navigation }: any) {
   const [data, setData] = useState<EventData[]>([]);
   const [activeTab, setActiveTab] = useState("live"); // Estado para la pestaña activa
-  const apiEventsLive = "https://proyectojc.com/api/v2/event/live";
-  const apiEventsPast = "https://proyectojc.com/api/v2/event/past";
+  const apiEventsLive = "https://192.168.33.37/api/v2/event/live";
+  const apiEventsPast = "https://192.168.33.37/api/v2/event/past";
 
   const consultaApi = async ( token: any, apiEvents: any) => {
     const options = {

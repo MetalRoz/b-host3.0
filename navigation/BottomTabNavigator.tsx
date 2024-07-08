@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Dashboard from "../pages/Dashboard";
 import Orders from "../pages/Orders";
@@ -11,40 +11,27 @@ import {
   Settings,
 } from "lucide-react-native";
 import {
-  PermissionsAndroid, SafeAreaView
+  PermissionsAndroid, SafeAreaView, View, Button, Text
 } from "react-native";
+import { CameraView } from "expo-camera";
+import Scanner from "../components/Scanner";
 
 const Tab = createBottomTabNavigator();
 
+
+
 const MyTabs = () => {
+
+
   const Scanner = () => {
-    const requestCameraPermission = async () => {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: "Cool Photo App Camera Permission",
-            message:
-              "Cool Photo App needs access to your camera " +
-              "so you can take awesome pictures.",
-            buttonNeutral: "Ask Me Later",
-            buttonNegative: "Cancel",
-            buttonPositive: "OK",
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          alert("Puedes usar la camara");
 
-        } else {
-          alert("Camera permission denied");
-        }
-      } catch (err) {
-        console.warn(err);
-      }
-    };
+return (<CameraView
+barcodeScannerSettings={{
+  barcodeTypes: ["qr"],
+}}
+/>)
 
-    requestCameraPermission()
-  };
+  }
 
   return (
     <Tab.Navigator>
@@ -59,18 +46,12 @@ const MyTabs = () => {
       />
       <Tab.Screen
         name="Check-In"
-        component={Orders}
+        component={Scanner}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon as={QrCodeIcon} color={color} size="xl" />
           ),
         }}
-        listeners={({ navigation, route }: any) => ({
-          tabPress: (e) => {
-            e.preventDefault();
-            Scanner();
-          },
-        })}
       />
       <Tab.Screen
         name="Ordenes"
