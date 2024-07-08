@@ -13,7 +13,6 @@ import {
 import {
   PermissionsAndroid, SafeAreaView
 } from "react-native";
-import { ReactNativeScannerView } from "@pushpendersingh/react-native-scanner";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,15 +34,7 @@ const MyTabs = () => {
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           alert("Puedes usar la camara");
-          return (
-            <SafeAreaView style={{ flex: 1 }}>
-              <ReactNativeScannerView
-                onQrScanned={(value: any) => {
-                  console.log(value.nativeEvent);
-                }}
-              />
-            </SafeAreaView>
-          );
+
         } else {
           alert("Camera permission denied");
         }
