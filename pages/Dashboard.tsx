@@ -25,7 +25,7 @@ const Dashboard = () => {
       if (userData !== null && event_data !== null) {
         const token = JSON.parse(userData).data.token;
         const event_id = JSON.parse(event_data).event_unique_id;
-        const apiEvents = `https://192.168.33.37/api/v2/event/dashbord/${event_id}`
+        const apiEvents = `https://proyectojc.com/api/v2/event/dashbord/${event_id}`
         const options = {
           method: "POST",
           headers: {
