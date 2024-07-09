@@ -43,8 +43,8 @@ const AppNavigator = () => {
         initialRouteName={initialRoute}
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="Login" component={Scanner} />
-        <Stack.Screen name="Events" component={Scanner} />
+        <Stack.Screen name="Login" component={BottomTabNavigator} />
+        <Stack.Screen name="Events" component={BottomTabNavigator} />
         <Stack.Screen name="User" component={UserProfile} />
         <Stack.Screen name="Dashboard" component={BottomTabNavigator} />
 

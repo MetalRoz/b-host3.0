@@ -10,10 +10,6 @@ import {
   ScrollTextIcon,
   Settings,
 } from "lucide-react-native";
-import {
-  PermissionsAndroid, SafeAreaView, View, Button, Text
-} from "react-native";
-import { CameraView } from "expo-camera";
 import Scanner from "../components/Scanner";
 
 const Tab = createBottomTabNavigator();
@@ -22,16 +18,6 @@ const Tab = createBottomTabNavigator();
 
 const MyTabs = () => {
 
-
-  const Scanner = () => {
-
-return (<CameraView
-barcodeScannerSettings={{
-  barcodeTypes: ["qr"],
-}}
-/>)
-
-  }
 
   return (
     <Tab.Navigator>
