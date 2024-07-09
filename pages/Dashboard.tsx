@@ -77,24 +77,24 @@ const Dashboard = () => {
       <HStack style={styles.cardsContainer} space="3xl">
         <Box style={[styles.card, { backgroundColor: "#EDE7F6" }]}>
           <Text style={styles.cardTitle}>
-            0 Total {data.event_order_tickets[0].NUMBER_OF_ORDER}
+            0 Total {data.event_order_tickets[0]?.NUMBER_OF_ORDER}
           </Text>
           <Text style={styles.cardText}>
-            {data.event_order_tickets[0].TICKE_TITLE}
+            {data.event_order_tickets[0]?.TICKE_TITLE}
           </Text>
           <Text style={styles.cardFooter}>
-            0/{data.event_order_tickets[0].NUMBER_OF_ORDER} Registrado
+            0/{data.event_order_tickets[0]?.NUMBER_OF_ORDER} Registrado
           </Text>
         </Box>
         <Box style={[styles.card, { backgroundColor: "#E8F5E9" }]}>
           <Text style={styles.cardTitle}>
-            0 Total {data.event_order_tickets[1].NUMBER_OF_ORDER}
+            0 Total {data.event_order_tickets[1]?.NUMBER_OF_ORDER}
           </Text>
           <Text style={styles.cardText}>
-            {data.event_order_tickets[1].TICKE_TITLE}
+            {data.event_order_tickets[1]?.TICKE_TITLE}
           </Text>
           <Text style={styles.cardFooter}>
-            0/{data.event_order_tickets[1].NUMBER_OF_ORDER} Registrado
+            0/{data.event_order_tickets[1]?.NUMBER_OF_ORDER} Registrado
           </Text>
         </Box>
       </HStack>
@@ -102,24 +102,24 @@ const Dashboard = () => {
       <HStack style={styles.cardsContainer} space="3xl">
         <Box style={[styles.card, { backgroundColor: "#E0F7FA" }]}>
           <Text style={styles.cardTitle}>
-            0 Total {data.event_order_tickets[2].NUMBER_OF_ORDER}
+            0 Total {data.event_order_tickets[2]?.NUMBER_OF_ORDER}
           </Text>
           <Text style={styles.cardText}>
-            {data.event_order_tickets[2].TICKE_TITLE}
+            {data.event_order_tickets[2]?.TICKE_TITLE}
           </Text>
           <Text style={styles.cardFooter}>
-            0/{data.event_order_tickets[2].NUMBER_OF_ORDER} Registrado
+            0/{data.event_order_tickets[2]?.NUMBER_OF_ORDER} Registrado
           </Text>
         </Box>
         <Box style={[styles.card, { backgroundColor: "#FFEBEE" }]}>
           <Text style={styles.cardTitle}>
-            0 Total {data.event_order_tickets[3].NUMBER_OF_ORDER}
+            0 Total {data.event_order_tickets[3]?.NUMBER_OF_ORDER}
           </Text>
           <Text style={styles.cardText}>
-            {data.event_order_tickets[3].TICKE_TITLE}
+            {data.event_order_tickets[3]?.TICKE_TITLE}
           </Text>
           <Text style={styles.cardFooter}>
-            0/{data.event_order_tickets[3].NUMBER_OF_ORDER} Registrado
+            0/{data.event_order_tickets[3]?.NUMBER_OF_ORDER} Registrado
           </Text>
         </Box>
       </HStack>
