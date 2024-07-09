@@ -29,7 +29,7 @@ import {
 export default function Login({ navigation }: any) {
   const toast = useToast();
 
-  const api = "https://proyectoyc.com";
+  const api = "https://proyectojc.com";
   const loginMethod = "api/v2/checkin/login";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
