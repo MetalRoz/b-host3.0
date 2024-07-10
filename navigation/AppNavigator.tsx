@@ -6,6 +6,7 @@ import Login from "../pages/Login";
 import Events from "../pages/Events";
 import UserProfile from "../pages/User";
 import BottomTabNavigator from "./BottomTabNavigator";
+import Test from "../pages/Test";
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +47,8 @@ const AppNavigator = () => {
         <Stack.Screen name="Events" component={Events} />
         <Stack.Screen name="User" component={UserProfile} />
         <Stack.Screen name="Dashboard" component={BottomTabNavigator} />
+        <Stack.Screen name="Test" component={Test} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

@@ -10,6 +10,8 @@ import {
   Alert,
   Image,
   ActivityIndicator,
+  Pressable,
+  SafeAreaView,
 } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,9 +22,6 @@ import {
   VStack,
   ToastTitle,
   ToastDescription,
-  Pressable,
-  CheckIcon,
-  CloseIcon,
   CheckCircleIcon,
 } from "@gluestack-ui/themed";
 
@@ -128,7 +127,7 @@ export default function Login({ navigation }: any) {
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={onLogin}>
+        <TouchableOpacity style={styles.button} onPress={(onLogin)}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>

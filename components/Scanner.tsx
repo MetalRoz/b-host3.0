@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import Modal from "react-native-modal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Test from "../pages/Test";
 
 const Scanner = () => {
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
   const [isCameraVisible, setIsCameraVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Cambiado a useState
   const [qrData, setQrData] = useState(null);
-  const [data, setData] = useState<any>([])
+  const [data, setData] = useState<any>([]);
 
   const checkIn = async (ticketId: any) => {
     const userData = await AsyncStorage.getItem("userData");
@@ -32,7 +32,8 @@ const Scanner = () => {
         }
         const data = await response.json();
         console.log("Respuesta del CHECKIN:", data);
-        setData(data)
+        setData(data);
+        setIsOpen(true); // Abrimos la hoja inferior automáticamente
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
@@ -45,14 +46,13 @@ const Scanner = () => {
       setHasPermission(status === "granted");
       setIsCameraVisible(true);
     })();
-    return setIsCameraVisible(false);
+    return () => setIsCameraVisible(false);
   }, []);
 
   const handleBarCodeScanned = ({ type, data }: any) => {
     setQrData(data);
-    checkIn(data)
+    checkIn(data);
     setIsCameraVisible(false);
-    setIsModalVisible(true);
   };
 
   if (hasPermission === null) {
@@ -70,18 +70,20 @@ const Scanner = () => {
           style={StyleSheet.absoluteFillObject}
         />
       )}
-
-      <Modal isVisible={isModalVisible}>
+      {!isCameraVisible && (
         <View style={styles.modal}>
-          <Text>{data.message}</Text>
-          <Button title="Close" onPress={() => setIsModalVisible(false)} />
+          <Test data={data} isOpen={isOpen} />
         </View>
-      </Modal>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  modal: {
+    width: "100%",
+    height: "100%",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -90,12 +92,6 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
     width: "100%",
-  },
-  modal: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
   },
 });
 
