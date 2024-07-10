@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import {
   Pressable,
@@ -15,9 +15,15 @@ import Animated, {
   withDelay,
   withTiming,
 } from "react-native-reanimated";
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  TicketCheckIcon,
+} from "lucide-react-native";
+import { Icon } from "@gluestack-ui/themed";
 
 function BottomSheet({ isOpen, toggleSheet, duration = 500, children }: any) {
-  const  colorScheme  = useColorScheme();
+  const colorScheme = useColorScheme();
   const height = useSharedValue(0);
   const progress = useDerivedValue(() =>
     withTiming(isOpen.value ? 0 : 1, { duration })
@@ -55,21 +61,22 @@ function BottomSheet({ isOpen, toggleSheet, duration = 500, children }: any) {
   );
 }
 
-export default function Test({data}: any) {
-  const colorScheme  = useColorScheme();
+export default function ModalCheckIn({ data }: any) {
+  const colorScheme = useColorScheme();
   const isOpen = useSharedValue(false);
 
   const toggleSheet = () => {
     isOpen.value = !isOpen.value;
   };
 
-  useEffect(()=>{
-    toggleSheet()
-  }, [])
+  useEffect(() => {
+    toggleSheet();
+  }, []);
 
   const contentStyle = {
     color: colorScheme === "light" ? "#001a72" : "#f8f9ff",
     textDecorationColor: colorScheme === "light" ? "#001a72" : "#f8f9ff",
+    fontSize: 20,
   };
 
   return (
@@ -82,16 +89,18 @@ export default function Test({data}: any) {
         <View style={styles.flex} />
       </View>
       <BottomSheet isOpen={isOpen} toggleSheet={toggleSheet}>
-        <Animated.Text style={contentStyle}>
-          {data.message}
-        </Animated.Text>
-        <View style={styles.buttonContainer}>
-          <Pressable style={[styles.bottomSheetButton]}>
-            <Text style={[styles.bottomSheetButtonText, contentStyle]}>
-              Read more
-            </Text>
-          </Pressable>
-        </View>
+        {data &&
+          data.message &&
+          (data.message.includes(
+            "Este ticket ya se encuentra en el evento, acceso no permitido"
+          ) ? (
+            <Icon as={XCircleIcon} size={80} color="$red400" />
+          ) : data.message.includes("Verificación exitosa") ? (
+            <Icon as={CheckCircleIcon} size={80} color="$green600" />
+          ) : (
+            <Icon as={XCircleIcon} size={80} color="$red400" />
+          ))}
+        <Animated.Text style={contentStyle}>{data.message}</Animated.Text>
       </BottomSheet>
     </SafeAreaView>
   );
@@ -116,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#b58df1",
     padding: 12,
     borderRadius: 48,
-    display: 'none'
+    display: "none",
   },
   toggleButtonText: {
     color: "white",
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
 const sheetStyles = StyleSheet.create({
   sheet: {
     padding: 16,
-    height: "70%",
+    height: "48%",
     width: "100%",
     position: "absolute",
     bottom: 0,
@@ -151,11 +160,9 @@ const sheetStyles = StyleSheet.create({
     borderTopLeftRadius: 20,
     zIndex: 2,
     alignItems: "center",
-    justifyContent: "center",
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
   },
 });
-

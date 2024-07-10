@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Test from "../pages/Test";
+import ModalCheckIn from "./ModalCheckIn";
 
 const Scanner = () => {
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
@@ -72,7 +72,7 @@ const Scanner = () => {
       )}
       {!isCameraVisible && (
         <View style={styles.modal}>
-          <Test data={data} isOpen={isOpen} />
+          <ModalCheckIn data={data} isOpen={isOpen} />
         </View>
       )}
     </View>
