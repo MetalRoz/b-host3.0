@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: 10,
+    marginBottom: 100,
     backgroundColor: "white",
   },
   orderContainer: {
