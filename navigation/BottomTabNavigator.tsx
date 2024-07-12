@@ -56,6 +56,7 @@ const MyTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Icon as={Settings} color={color} size="xl" />
           ),
+          headerShown: false
         }}
       />
     </Tab.Navigator>
