@@ -61,17 +61,20 @@ function BottomSheet({ isOpen, toggleSheet, duration = 500, children }: any) {
   );
 }
 
-export default function ModalCheckIn({ data }: any) {
+export default function ModalCheckIn({ data, isOpen, onClose }: any) {
   const colorScheme = useColorScheme();
-  const isOpen = useSharedValue(false);
+  const isSheetOpen = useSharedValue(isOpen);
 
   const toggleSheet = () => {
-    isOpen.value = !isOpen.value;
+    isSheetOpen.value = !isSheetOpen.value;
+    if (!isSheetOpen.value) {
+      onClose();
+    }
   };
 
   useEffect(() => {
-    toggleSheet();
-  }, []);
+    isSheetOpen.value = isOpen;
+  }, [isOpen]);
 
   const contentStyle = {
     color: colorScheme === "light" ? "#001a72" : "#f8f9ff",
@@ -81,14 +84,7 @@ export default function ModalCheckIn({ data }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.safeArea}>
-        <View style={styles.flex} />
-        <Pressable style={styles.toggleButton} onPress={toggleSheet}>
-          <Text style={styles.toggleButtonText}>Toggle bottom sheet</Text>
-        </Pressable>
-        <View style={styles.flex} />
-      </View>
-      <BottomSheet isOpen={isOpen} toggleSheet={toggleSheet}>
+      <BottomSheet isOpen={isSheetOpen} toggleSheet={toggleSheet}>
         {data &&
           data.message &&
           (data.message.includes(
