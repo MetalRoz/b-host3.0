@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Camera } from "expo-camera";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
+import { CameraView, Camera } from "expo-camera";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalCheckIn from "./ModalCheckIn";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Scanner = () => {
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
+  const [scanned, setScanned] = useState(false);
   const [isCameraVisible, setIsCameraVisible] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // Cambiado a useState
+  const [isOpen, setIsOpen] = useState(false);
   const [qrData, setQrData] = useState(null);
   const [data, setData] = useState<any>([]);
 
@@ -40,19 +41,24 @@ const Scanner = () => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-      setIsCameraVisible(true);
-    })();
-    return () => setIsCameraVisible(false);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const getCameraPermissions = async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === "granted");
+        setIsCameraVisible(true);
+      };
+
+      getCameraPermissions();
+      return () => setIsCameraVisible(false);
+    }, [])
+  );
 
   const handleBarCodeScanned = ({ type, data }: any) => {
+    setScanned(true);
     setQrData(data);
     checkIn(data);
-    setIsCameraVisible(false);
+    // setIsCameraVisible(false);
   };
 
   if (hasPermission === null) {
@@ -65,12 +71,15 @@ const Scanner = () => {
   return (
     <View style={styles.container}>
       {isCameraVisible && (
-        <BarCodeScanner
-          onBarCodeScanned={handleBarCodeScanned}
+        <CameraView
+          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr", "pdf417"],
+          }}
           style={StyleSheet.absoluteFillObject}
         />
       )}
-      {!isCameraVisible && (
+      {data.message && (
         <View style={styles.modal}>
           <ModalCheckIn data={data} isOpen={isOpen} />
         </View>
