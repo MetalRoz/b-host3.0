@@ -6,6 +6,7 @@ import UserProfile from "../pages/User";
 import { Icon } from "@gluestack-ui/themed";
 import {
   HomeIcon,
+  LayoutDashboardIcon,
   QrCodeIcon,
   ScrollTextIcon,
   Settings,
@@ -26,7 +27,7 @@ const MyTabs = () => {
         component={Dashboard}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon as={HomeIcon} color={color} size="xl" />
+            <Icon as={LayoutDashboardIcon} color={color} size="xl" />
           ),
         }}
       />

@@ -1,12 +1,21 @@
 import { Icon } from "@gluestack-ui/themed";
 import { ClockIcon, QrCodeIcon, TimerIcon } from "lucide-react-native";
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OrderScreen = () => {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [selectedTab, setSelectedTab] = useState("All");
 
   useEffect(() => {
     const consultaApi = async () => {
@@ -30,7 +39,6 @@ const OrderScreen = () => {
             throw new Error("Error:" + `${response.status}`);
           }
           const result = await response.json();
-          console.log("EVENNNNTOOOSSSS:", result);
           setData(result.data); // Asegúrate de obtener la propiedad 'data' del resultado
         } catch (error) {
           console.error("Error en la solicitud:", error);
@@ -40,6 +48,28 @@ const OrderScreen = () => {
 
     consultaApi();
   }, []);
+
+  useEffect(() => {
+    filterData();
+  }, [search, selectedTab, data]);
+
+  const filterData = () => {
+    let filtered = data.filter(
+      (item) =>
+        item.ot_f_name.toLowerCase().includes(search.toLowerCase()) ||
+        item.ot_l_name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.ot_email.toLowerCase().includes(search.toLowerCase()) ||
+        item.order_id.toLowerCase().includes(search.toLowerCase())
+    );
+
+    if (selectedTab === "Checked In") {
+      filtered = filtered.filter((item) => item.ot_status === 1);
+    } else if (selectedTab === "Pending") {
+      filtered = filtered.filter((item) => item.ot_status === 0);
+    }
+
+    setFilteredData(filtered);
+  };
 
   const renderItem = ({ item }: any) => (
     <View style={styles.itemContainer}>
@@ -64,6 +94,50 @@ const OrderScreen = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.tabContainer}>
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === "All" && styles.selectedTab]}
+          onPress={() => setSelectedTab("All")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === "All" && styles.selectedTabText,
+            ]}
+          >
+            All
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.tab,
+            selectedTab === "Checked In" && styles.selectedTab,
+          ]}
+          onPress={() => setSelectedTab("Checked In")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === "Checked In" && styles.selectedTabText,
+            ]}
+          >
+            Checked In
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === "Pending" && styles.selectedTab]}
+          onPress={() => setSelectedTab("Pending")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === "Pending" && styles.selectedTabText,
+            ]}
+          >
+            Pending
+          </Text>
+        </TouchableOpacity>
+      </View>
       <TextInput
         style={styles.searchBar}
         placeholder="Search"
@@ -71,15 +145,36 @@ const OrderScreen = () => {
         onChangeText={setSearch}
       />
       <FlatList
-        data={data}
+        data={filteredData}
         renderItem={renderItem}
-        keyExtractor={(item) => item.order_id}
+        // Remove the keyExtractor to show all items regardless of id
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 10,
+    backgroundColor: "#f1f1f1",
+  },
+  tab: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  selectedTab: {
+    backgroundColor: "#007bff",
+  },
+  tabText: {
+    color: "#007bff",
+    fontWeight: "bold",
+  },
+  selectedTabText: {
+    color: "#fff",
+  },
   iconClock: {
     padding: 5,
     backgroundColor: "#d4e5ff",
@@ -91,8 +186,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   container: {
+    flex: 1,
     paddingTop: 10,
-    marginBottom: 100,
     backgroundColor: "white",
   },
   orderContainer: {
