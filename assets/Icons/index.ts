@@ -129,6 +129,7 @@ export const Icons = {
   updown: require("./ic_updown.png"),
   share: require("./ic_share.png"),
   info: require("./ic_info.png"),
+  info2x: require("./ic_info2x.png"),
   arrow_upright: require("./ic_arrow_upright.png"),
   wallet: require("./ic_wallet.png"),
   ticket: require("./ic_ticket.png"),

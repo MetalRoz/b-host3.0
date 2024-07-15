@@ -25,7 +25,7 @@ const Scanner = () => {
           Authorization: "Bearer " + token,
         },
       };
-      const apiCheckIn = `https://proyectojc.com/api/v2/ticketcode/${ticketId}/${eventId}`;
+      const apiCheckIn = `https://pruebatu.com/api/v2/ticketcode/${ticketId}/${eventId}`;
       try {
         const response = await fetch(apiCheckIn, options);
         if (!response.ok) {

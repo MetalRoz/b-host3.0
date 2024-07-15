@@ -10,15 +10,8 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventsLive from "../components/EventsLive";
 import EventsPast from "../components/EventsLive";
-import {
-  Avatar,
-  VStack,
-  HStack,
-  Icon,
-  Pressable
-} from "@gluestack-ui/themed";
+import { Avatar, VStack, HStack, Icon, Pressable } from "@gluestack-ui/themed";
 import { User } from "lucide-react-native";
-
 // Definir la interfaz de los datos del evento
 interface EventData {
   event_name: string;
@@ -31,10 +24,11 @@ interface EventData {
 export default function Events({ navigation }: any) {
   const [data, setData] = useState<EventData[]>([]);
   const [activeTab, setActiveTab] = useState("live"); // Estado para la pestaña activa
-  const apiEventsLive = "https://proyectojc.com/api/v2/event/live";
-  const apiEventsPast = "https://proyectojc.com/api/v2/event/past";
+  const apiEventsLive = "https://pruebatu.com/api/v2/event/live";
+  const apiEventsPast = "https://pruebatu.com/api/v2/event/past";
+  const [alert$, setAlert] = useState(false);
 
-  const consultaApi = async ( token: any, apiEvents: any) => {
+  const consultaApi = async (token: any, apiEvents: any) => {
     const options = {
       method: "POST",
       headers: {
@@ -58,7 +52,7 @@ export default function Events({ navigation }: any) {
   const checkToken = async () => {
     const storage = await AsyncStorage.getItem("userData");
     if (storage !== null) {
-      const token = JSON.parse(storage).data.token
+      const token = JSON.parse(storage).data.token;
       if (activeTab === "live") {
         consultaApi(token, apiEventsLive);
       } else if (activeTab === "past") {
@@ -78,7 +72,12 @@ export default function Events({ navigation }: any) {
 
     if (activeTab === "live") {
       return data.map((item, index) => (
-        <EventsLive key={index} item={item} index={index} navigation={navigation}></EventsLive>
+        <EventsLive
+          key={index}
+          item={item}
+          index={index}
+          navigation={navigation}
+        ></EventsLive>
       ));
     }
 
@@ -99,10 +98,12 @@ export default function Events({ navigation }: any) {
         />
         <VStack space="2xl">
           <HStack space="md">
-            <Pressable onPress={() => navigation.navigate('User', {test: 123})}>
-            <Avatar bgColor="$indigo600">
-              <Icon as={User} color="white" size="lg" />
-            </Avatar>
+            <Pressable
+              onPress={() => navigation.navigate("User", { test: 123 })}
+            >
+              <Avatar bgColor="$indigo600">
+                <Icon as={User} color="white" size="lg" />
+              </Avatar>
             </Pressable>
           </HStack>
         </VStack>

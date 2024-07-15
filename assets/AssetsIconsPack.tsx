@@ -159,6 +159,7 @@ const AssetsIconsPack: IconPack<ImageProps | SvgProps> = {
     updown: createIcon(Icons.updown),
     share: createIcon(Icons.share),
     info: createIcon(Icons.info),
+    info2x: createIcon(Icons.info2x),
     arrow_upright: createIcon(Icons.arrow_upright),
     wallet: createIcon(Icons.wallet),
     ticket: createIcon(Icons.ticket),

@@ -25,7 +25,7 @@ const OrderScreen = () => {
       if (userData !== null && event_data !== null) {
         const token = JSON.parse(userData).data.token;
         const event_id = JSON.parse(event_data).event_unique_id;
-        const apiOrders = `https://proyectojc.com/api/v2/order/ticktes/${event_id}`;
+        const apiOrders = `https://pruebatu.com/api/v2/order/ticktes/${event_id}`;
         const options = {
           method: "POST",
           headers: {

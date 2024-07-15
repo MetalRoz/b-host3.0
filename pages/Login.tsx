@@ -28,7 +28,7 @@ import {
 export default function Login({ navigation }: any) {
   const toast = useToast();
 
-  const api = "https://proyectojc.com";
+  const api = "https://pruebatu.com";
   const loginMethod = "api/v2/checkin/login";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,6 +63,7 @@ export default function Login({ navigation }: any) {
       setLoading(false);
       if (data.response === true) {
         toast.show({
+          duration: 1500,
           placement: "bottom",
           render: ({ id }) => {
             const toastId = "toast-" + id;
@@ -127,7 +128,7 @@ export default function Login({ navigation }: any) {
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={(onLogin)}>
+        <TouchableOpacity style={styles.button} onPress={onLogin}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
   toggleButton: {
     position: "absolute",
     right: 10,
-    top: 10,
+    top: 13,
     justifyContent: "center",
   },
   button: {

@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Dashboard from "../pages/Dashboard";
 import Orders from "../pages/Orders";
-import UserProfile from "../pages/User";
+import Profile01 from "../pages/User";
 import { Icon } from "@gluestack-ui/themed";
 import {
-  HomeIcon,
   LayoutDashboardIcon,
   QrCodeIcon,
   ScrollTextIcon,
@@ -15,11 +14,7 @@ import Scanner from "../components/Scanner";
 
 const Tab = createBottomTabNavigator();
 
-
-
 const MyTabs = () => {
-
-
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -29,6 +24,7 @@ const MyTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Icon as={LayoutDashboardIcon} color={color} size="xl" />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -51,12 +47,12 @@ const MyTabs = () => {
       />
       <Tab.Screen
         name="Ajustes"
-        component={UserProfile}
+        component={Profile01}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon as={Settings} color={color} size="xl" />
           ),
-          headerShown: false
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

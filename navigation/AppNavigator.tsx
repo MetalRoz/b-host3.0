@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import Login from "../pages/Login";
 import Events from "../pages/Events";
-import UserProfile from "../pages/User";
+import Profile01 from "../pages/User";
 import BottomTabNavigator from "./BottomTabNavigator";
 
 const Stack = createNativeStackNavigator();
@@ -44,10 +44,8 @@ const AppNavigator = () => {
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Events" component={Events} />
-        <Stack.Screen name="User" component={UserProfile} />
+        <Stack.Screen name="User" component={Profile01} />
         <Stack.Screen name="Dashboard" component={BottomTabNavigator} />
-
-
       </Stack.Navigator>
     </NavigationContainer>
   );
