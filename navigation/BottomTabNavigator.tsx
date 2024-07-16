@@ -34,6 +34,7 @@ const MyTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Icon as={QrCodeIcon} color={color} size="xl" />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen

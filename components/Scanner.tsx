@@ -48,7 +48,6 @@ const Scanner = () => {
         setHasPermission(status === "granted");
         setIsCameraVisible(true);
       };
-
       getCameraPermissions();
       return () => setIsCameraVisible(false);
     }, [])

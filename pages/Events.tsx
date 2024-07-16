@@ -73,7 +73,6 @@ export default function Events({ navigation }: any) {
     if (activeTab === "live") {
       return data.map((item, index) => (
         <EventsLive
-          key={index}
           item={item}
           index={index}
           navigation={navigation}
@@ -83,7 +82,7 @@ export default function Events({ navigation }: any) {
 
     if (activeTab === "past") {
       return data.map((item, index) => (
-        <EventsPast key={index} item={item} index={index}></EventsPast>
+        <EventsPast item={item} index={index} navigation={navigation}></EventsPast>
       ));
     }
   };
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 20,
     fontSize: 16,
-    width: "88%",
+    width: "82%",
   },
   tabs: {
     flexDirection: "row",

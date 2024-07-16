@@ -14,6 +14,7 @@ import {
   ArrowLeftIcon,
 } from "@gluestack-ui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import EventsCard from "../components/EventsCard";
 
 const Dashboard = ({ navigation }: any) => {
   const [data, setData] = useState<any>(null);
@@ -57,10 +58,9 @@ const Dashboard = ({ navigation }: any) => {
 
   return (
     <VStack style={styles.container} space="3xl">
-
       <Box style={styles.circleProgressContainer}>
         <Card p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-          <TouchableOpacity onPress={() => alert(data.event_name)}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon as={ArrowLeftIcon}></Icon>
           </TouchableOpacity>
           <Heading size="md" fontFamily="$heading" mb="$4">
@@ -94,19 +94,16 @@ const Dashboard = ({ navigation }: any) => {
       <Text style={styles.subTitle}>Total de registros</Text>
 
       <ScrollView>
-        {/* Renderiza dinámicamente todos los tickets */}
-        {data.event_order_tickets.map((ticket: any, index: number) => (
-          <Box
-            key={index}
-            style={[styles.card, { backgroundColor: getColor(index) }]}
-          >
-            <Text style={styles.cardTitle}>
+        {data.event_order_tickets.map((ticket: any) => (
+          <Box style={[styles.card]}>
+            {/* <Text style={styles.cardTitle}>
               {ticket.TICKE_TITLE} - Total: {ticket.NUMBER_OF_ORDER}
             </Text>
             <Text style={styles.cardText}>
               Registrado: {ticket.REGISTERED_TICKETS || 0} /{" "}
               {ticket.NUMBER_OF_ORDER}
-            </Text>
+            </Text> */} 
+            <EventsCard data={ticket}></EventsCard>
           </Box>
         ))}
       </ScrollView>
@@ -114,16 +111,10 @@ const Dashboard = ({ navigation }: any) => {
   );
 };
 
-// Función para determinar el color del fondo de cada tarjeta
-const getColor = (index: number) => {
-  const colors = ["#EDE7F6", "#E8F5E9", "#E0F7FA", "#FFEBEE"];
-  return colors[index % colors.length]; // Cambia el color según el índice
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: "white",
   },
   title: {
@@ -143,8 +134,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
+    padding: 5,
   },
   cardTitle: {
     fontSize: 18,
