@@ -1,5 +1,5 @@
-import { Icon } from "@gluestack-ui/themed";
-import { ClockIcon, QrCodeIcon, TimerIcon } from "lucide-react-native";
+import { Box, HStack, Icon, VStack } from "@gluestack-ui/themed";
+import { QrCodeIcon, TimerIcon } from "lucide-react-native";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -7,15 +7,17 @@ import {
   TextInput,
   FlatList,
   StyleSheet,
+  ScrollView,
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Tab, TabView } from "@rneui/themed";
 
 const OrderScreen = () => {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
-  const [selectedTab, setSelectedTab] = useState("All");
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const consultaApi = async () => {
@@ -51,7 +53,7 @@ const OrderScreen = () => {
 
   useEffect(() => {
     filterData();
-  }, [search, selectedTab, data]);
+  }, [search, selectedIndex, data]);
 
   const filterData = () => {
     let filtered = data.filter(
@@ -62,9 +64,9 @@ const OrderScreen = () => {
         item.order_id.toLowerCase().includes(search.toLowerCase())
     );
 
-    if (selectedTab === "Checked In") {
+    if (selectedIndex === 1) {
       filtered = filtered.filter((item) => item.ot_status === 1);
-    } else if (selectedTab === "Pending") {
+    } else if (selectedIndex === 2) {
       filtered = filtered.filter((item) => item.ot_status === 0);
     }
 
@@ -94,61 +96,66 @@ const OrderScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === "All" && styles.selectedTab]}
-          onPress={() => setSelectedTab("All")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              selectedTab === "All" && styles.selectedTabText,
-            ]}
-          >
-            All
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.tab,
-            selectedTab === "Checked In" && styles.selectedTab,
-          ]}
-          onPress={() => setSelectedTab("Checked In")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              selectedTab === "Checked In" && styles.selectedTabText,
-            ]}
-          >
-            Checked In
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === "Pending" && styles.selectedTab]}
-          onPress={() => setSelectedTab("Pending")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              selectedTab === "Pending" && styles.selectedTabText,
-            ]}
-          >
-            Pending
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <Tab
+        value={selectedIndex}
+        onChange={setSelectedIndex}
+        indicatorStyle={{
+          backgroundColor: "blue",
+          height: 3,
+        }}
+        variant="default"
+      >
+        <Tab.Item>
+          <HStack>
+            <TouchableOpacity>
+              <Text>TODO</Text>
+            </TouchableOpacity>
+          </HStack>
+        </Tab.Item>
+        <Tab.Item>
+          <TouchableOpacity>
+            <HStack>
+              <Icon as={QrCodeIcon}></Icon>
+              <Text>Check-in</Text>
+            </HStack>
+          </TouchableOpacity>
+        </Tab.Item>
+        <Tab.Item>
+          <HStack>
+            <Icon as={TimerIcon}></Icon>
+            <Text>Pendiente</Text>
+          </HStack>
+        </Tab.Item>
+      </Tab>
+
       <TextInput
         style={styles.searchBar}
         placeholder="Search"
         value={search}
         onChangeText={setSearch}
       />
-      <FlatList
-        data={filteredData}
-        renderItem={renderItem}
-        // Remove the keyExtractor to show all items regardless of id
-      />
+
+      <TabView
+        value={selectedIndex}
+        onChange={setSelectedIndex}
+        animationType="spring"
+      >
+        <TabView.Item style={{ width: "100%" }}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <FlatList data={filteredData} renderItem={renderItem} />
+          </ScrollView>
+        </TabView.Item>
+        <TabView.Item style={{ width: "100%" }}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <FlatList data={filteredData} renderItem={renderItem} />
+          </ScrollView>
+        </TabView.Item>
+        <TabView.Item style={{ width: "100%" }}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <FlatList data={filteredData} renderItem={renderItem} />
+          </ScrollView>
+        </TabView.Item>
+      </TabView>
     </View>
   );
 };
@@ -219,6 +226,9 @@ const styles = StyleSheet.create({
   },
   orderNoText: {
     color: "gray",
+  },
+  scrollContainer: {
+    paddingBottom: 20,
   },
 });
 

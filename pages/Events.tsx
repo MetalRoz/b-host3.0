@@ -9,10 +9,11 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventsLive from "../components/EventsLive";
-import EventsPast from "../components/EventsLive";
+import EventsPast from "../components/EventsPast";
 import { Avatar, VStack, HStack, Icon, Pressable } from "@gluestack-ui/themed";
 import { User } from "lucide-react-native";
-// Definir la interfaz de los datos del evento
+import { Tab, TabView } from "@rneui/themed";
+
 interface EventData {
   event_name: string;
   event_start_datetime: string;
@@ -22,13 +23,17 @@ interface EventData {
 }
 
 export default function Events({ navigation }: any) {
-  const [data, setData] = useState<EventData[]>([]);
-  const [activeTab, setActiveTab] = useState("live"); // Estado para la pestaña activa
+  const [liveData, setLiveData] = useState<EventData[]>([]);
+  const [pastData, setPastData] = useState<EventData[]>([]);
   const apiEventsLive = "https://pruebatu.com/api/v2/event/live";
   const apiEventsPast = "https://pruebatu.com/api/v2/event/past";
-  const [alert$, setAlert] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [token, setToken] = useState("");
 
-  const consultaApi = async (token: any, apiEvents: any) => {
+  const fetchEvents = async (
+    apiUrl: string,
+    setData: React.Dispatch<React.SetStateAction<EventData[]>>
+  ) => {
     const options = {
       method: "POST",
       headers: {
@@ -37,12 +42,11 @@ export default function Events({ navigation }: any) {
     };
 
     try {
-      const response = await fetch(apiEvents, options);
+      const response = await fetch(apiUrl, options);
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
       const data = await response.json();
-      console.log("Respuesta de la API:", data);
       setData(data.data); // Actualizar el estado con los datos recibidos
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -53,38 +57,35 @@ export default function Events({ navigation }: any) {
     const storage = await AsyncStorage.getItem("userData");
     if (storage !== null) {
       const token = JSON.parse(storage).data.token;
-      if (activeTab === "live") {
-        consultaApi(token, apiEventsLive);
-      } else if (activeTab === "past") {
-        consultaApi(token, apiEventsPast);
-      }
+      setToken(token);
     }
   };
 
   useEffect(() => {
     checkToken();
-  }, [activeTab]); // Ejecutar cada vez que cambie la pestaña activa
+  }, []);
 
-  const renderItems = () => {
+  useEffect(() => {
+    if (token) {
+      if (index === 0) {
+        fetchEvents(apiEventsLive, setLiveData);
+      } else {
+        fetchEvents(apiEventsPast, setPastData);
+      }
+    }
+  }, [index, token]);
+
+  const renderItems = (data: EventData[], Component: any) => {
     if (data.length === 0) {
       return <Text>No hay datos disponibles.</Text>;
     }
-
-    if (activeTab === "live") {
-      return data.map((item, index) => (
-        <EventsLive
-          item={item}
-          index={index}
-          navigation={navigation}
-        ></EventsLive>
-      ));
-    }
-
-    if (activeTab === "past") {
-      return data.map((item, index) => (
-        <EventsPast item={item} index={index} navigation={navigation}></EventsPast>
-      ));
-    }
+    return data.map((item, index) => (
+      <Component
+        item={item}
+        index={index}
+        navigation={navigation}
+      />
+    ));
   };
 
   return (
@@ -107,31 +108,47 @@ export default function Events({ navigation }: any) {
           </HStack>
         </VStack>
       </View>
-      <View style={styles.tabs}>
-        <TouchableOpacity onPress={() => setActiveTab("live")}>
-          <Text
-            style={activeTab === "live" ? styles.activeTab : styles.inactiveTab}
-          >
-            Próximos Eventos
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setActiveTab("past")}>
-          <Text
-            style={activeTab === "past" ? styles.activeTab : styles.inactiveTab}
-          >
-            Pasado
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <>
+        <Tab
+          value={index}
+          onChange={(e) => setIndex(e)}
+          indicatorStyle={{
+            backgroundColor: "#1976D2",
+            height: 3,
+          }}
+          variant="default"
+        >
+          <Tab.Item
+            title="Próximos Eventos"
+            titleStyle={{ fontSize: 13, color: "black" }}
+          />
+          <Tab.Item
+            title="Eventos Pasados"
+            titleStyle={{ fontSize: 13, color: "black" }}
+          />
+        </Tab>
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {renderItems()}
-      </ScrollView>
+        <TabView value={index} onChange={setIndex} animationType="spring">
+          <TabView.Item style={{ width: "100%" }}>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+              {renderItems(liveData, EventsLive)}
+            </ScrollView>
+          </TabView.Item>
+          <TabView.Item style={{ width: "100%" }}>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+              {renderItems(pastData, EventsPast)}
+            </ScrollView>
+          </TabView.Item>
+        </TabView>
+      </>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  tabBar: {
+    paddingHorizontal: 16,
+  },
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",

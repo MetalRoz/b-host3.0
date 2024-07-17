@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 import {
   Pressable,
@@ -69,6 +69,7 @@ export default function ModalCheckIn({ data, isOpen, onClose }: any) {
     isSheetOpen.value = !isSheetOpen.value;
     if (!isSheetOpen.value) {
       onClose();
+      isSheetOpen.value = false;
     }
   };
 
@@ -97,6 +98,9 @@ export default function ModalCheckIn({ data, isOpen, onClose }: any) {
             <Icon as={XCircleIcon} size={80} color="$red400" />
           ))}
         <Animated.Text style={contentStyle}>{data.message}</Animated.Text>
+        <Animated.Text>
+          Este modal se cerrará automáticamente en 3 segundos...
+        </Animated.Text>
       </BottomSheet>
     </SafeAreaView>
   );

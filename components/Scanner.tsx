@@ -13,6 +13,20 @@ const Scanner = () => {
   const [qrData, setQrData] = useState(null);
   const [data, setData] = useState<any>([]);
 
+  const resetScanner = () => {
+    setScanned(false);
+    setQrData(null);
+    setIsCameraVisible(false);
+    setTimeout(() => {
+      setIsCameraVisible(true);
+    }, 200);
+
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 3000);
+
+  };
+
   const checkIn = async (ticketId: any) => {
     const userData = await AsyncStorage.getItem("userData");
     const event_data = await AsyncStorage.getItem("event_data");
@@ -37,6 +51,8 @@ const Scanner = () => {
         setIsOpen(true); // Abrimos la hoja inferior automáticamente
       } catch (error) {
         console.error("Error en la solicitud:", error);
+      } finally {
+        resetScanner(); // Reset the scanner after processing the data
       }
     }
   };
@@ -57,7 +73,6 @@ const Scanner = () => {
     setScanned(true);
     setQrData(data);
     checkIn(data);
-    // setIsCameraVisible(false);
   };
 
   if (hasPermission === null) {
