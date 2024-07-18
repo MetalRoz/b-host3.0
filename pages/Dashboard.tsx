@@ -12,12 +12,16 @@ import {
   ArrowRightIcon,
   Text,
   ArrowLeftIcon,
+  Spinner,
 } from "@gluestack-ui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventsCard from "../components/EventsCard";
+import { CircularProgressBar } from "@ui-kitten/components";
+import CircleProgress from "../components/CircleProgress";
 
 const Dashboard = ({ navigation }: any) => {
   const [data, setData] = useState<any>(null);
+  const [dataStorage, setDataStorage] = useState<any>(null);
 
   useEffect(() => {
     const consultaApi = async () => {
@@ -25,6 +29,7 @@ const Dashboard = ({ navigation }: any) => {
       const event_data = await AsyncStorage.getItem("event_data");
 
       if (userData !== null && event_data !== null) {
+        setDataStorage(JSON.parse(event_data));
         const token = JSON.parse(userData).data.token;
         const event_id = JSON.parse(event_data).event_unique_id;
         const apiEvents = `https://pruebatu.com/api/v2/event/dashbord/${event_id}`;
@@ -53,41 +58,30 @@ const Dashboard = ({ navigation }: any) => {
   }, []);
 
   if (!data) {
-    return <Text>Cargando...</Text>; // Mostrar un texto de carga mientras se obtienen los datos
+    return <Spinner />;
   }
 
   return (
     <VStack style={styles.container} space="3xl">
       <Box style={styles.circleProgressContainer}>
-        <Card p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon as={ArrowLeftIcon}></Icon>
-          </TouchableOpacity>
-          <Heading size="md" fontFamily="$heading" mb="$4">
-            {data.event_name}
-          </Heading>
-          <Link href="https://gluestack.io/" isExternal>
-            <HStack alignItems="center">
-              <LinkText
-                size="sm"
-                fontFamily="$heading"
-                fontWeight="$semibold"
-                color="$primary600"
-                $dark-color="$primary300"
-                textDecorationLine="none"
-              >
-                Read Blog
-              </LinkText>
-              <Icon
-                as={ArrowRightIcon}
-                size="sm"
-                color="$primary600"
-                mt="$0.5"
-                ml="$0.5"
-                $dark-color="$primary300"
-              />
-            </HStack>
-          </Link>
+        <Card p="$5" borderRadius="$lg" minWidth={300} m="$3">
+          <HStack style={{ marginBottom: 20 }}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon style={{ padding: 10 }} size="xl" as={ArrowLeftIcon}></Icon>
+            </TouchableOpacity>
+            <Heading
+              style={{ margin: "auto", maxWidth: "90%" }}
+              size="md"
+              fontFamily="$heading"
+              mb="$4"
+            >
+              {dataStorage.event_name}
+            </Heading>
+          </HStack>
+          <CircleProgress
+            progress={data.total_chackin_tickets}
+            total={data.total_order_tickets}
+          ></CircleProgress>
         </Card>
       </Box>
 
@@ -96,13 +90,6 @@ const Dashboard = ({ navigation }: any) => {
       <ScrollView>
         {data.event_order_tickets.map((ticket: any) => (
           <Box style={[styles.card]}>
-            {/* <Text style={styles.cardTitle}>
-              {ticket.TICKE_TITLE} - Total: {ticket.NUMBER_OF_ORDER}
-            </Text>
-            <Text style={styles.cardText}>
-              Registrado: {ticket.REGISTERED_TICKETS || 0} /{" "}
-              {ticket.NUMBER_OF_ORDER}
-            </Text> */} 
             <EventsCard data={ticket}></EventsCard>
           </Box>
         ))}

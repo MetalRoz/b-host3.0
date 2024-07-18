@@ -1,4 +1,4 @@
-import { Box, HStack, Icon, VStack } from "@gluestack-ui/themed";
+import { Icon } from "@gluestack-ui/themed";
 import { QrCodeIcon, TimerIcon } from "lucide-react-native";
 import React, { useState, useEffect } from "react";
 import {
@@ -7,17 +7,15 @@ import {
   TextInput,
   FlatList,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Tab, TabView } from "@rneui/themed";
 
 const OrderScreen = () => {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedTab, setSelectedTab] = useState("All");
 
   useEffect(() => {
     const consultaApi = async () => {
@@ -53,7 +51,7 @@ const OrderScreen = () => {
 
   useEffect(() => {
     filterData();
-  }, [search, selectedIndex, data]);
+  }, [search, selectedTab, data]);
 
   const filterData = () => {
     let filtered = data.filter(
@@ -64,9 +62,9 @@ const OrderScreen = () => {
         item.order_id.toLowerCase().includes(search.toLowerCase())
     );
 
-    if (selectedIndex === 1) {
+    if (selectedTab === "Checked In") {
       filtered = filtered.filter((item) => item.ot_status === 1);
-    } else if (selectedIndex === 2) {
+    } else if (selectedTab === "Pending") {
       filtered = filtered.filter((item) => item.ot_status === 0);
     }
 
@@ -96,66 +94,73 @@ const OrderScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Tab
-        value={selectedIndex}
-        onChange={setSelectedIndex}
-        indicatorStyle={{
-          backgroundColor: "blue",
-          height: 3,
-        }}
-        variant="default"
-      >
-        <Tab.Item>
-          <HStack>
-            <TouchableOpacity>
-              <Text>TODO</Text>
-            </TouchableOpacity>
-          </HStack>
-        </Tab.Item>
-        <Tab.Item>
-          <TouchableOpacity>
-            <HStack>
-              <Icon as={QrCodeIcon}></Icon>
-              <Text>Check-in</Text>
-            </HStack>
-          </TouchableOpacity>
-        </Tab.Item>
-        <Tab.Item>
-          <HStack>
-            <Icon as={TimerIcon}></Icon>
-            <Text>Pendiente</Text>
-          </HStack>
-        </Tab.Item>
-      </Tab>
-
+      <View style={styles.tabContainer}>
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === "All" && styles.allTab]}
+          onPress={() => setSelectedTab("All")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === "All" && styles.pendingText,
+            ]}
+          >
+            All
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.tab,
+            selectedTab === "Checked In" && styles.checkedInTab,
+          ]}
+          onPress={() => setSelectedTab("Checked In")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === "Checked In" && styles.checkedText,
+            ]}
+          >
+            <Icon
+              as={QrCodeIcon}
+              size="sm"
+              style={[
+                styles.tabText,
+                selectedTab === "Checked In" && styles.checkedText,
+              ]}
+            />
+            Checked In
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === "Pending" && styles.pendingTab]}
+          onPress={() => setSelectedTab("Pending")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === "Pending" && styles.pendingText,
+            ]}
+          >
+            <Icon
+              as={TimerIcon}
+              size="sm"
+              style={[
+                styles.tabText,
+                selectedTab === "Pending" && styles.pendingText,
+              ]}
+            />
+            Pending
+          </Text>
+        </TouchableOpacity>
+      </View>
       <TextInput
         style={styles.searchBar}
         placeholder="Search"
         value={search}
         onChangeText={setSearch}
       />
-
-      <TabView
-        value={selectedIndex}
-        onChange={setSelectedIndex}
-        animationType="spring"
-      >
-        <TabView.Item style={{ width: "100%" }}>
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <FlatList data={filteredData} renderItem={renderItem} />
-          </ScrollView>
-        </TabView.Item>
-        <TabView.Item style={{ width: "100%" }}>
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <FlatList data={filteredData} renderItem={renderItem} />
-          </ScrollView>
-        </TabView.Item>
-        <TabView.Item style={{ width: "100%" }}>
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <FlatList data={filteredData} renderItem={renderItem} />
-          </ScrollView>
-        </TabView.Item>
-      </TabView>
+      <FlatList data={filteredData} renderItem={renderItem} />
     </View>
   );
 };
@@ -163,20 +168,35 @@ const OrderScreen = () => {
 const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    paddingHorizontal: 10,
     paddingVertical: 10,
-    backgroundColor: "#f1f1f1",
+    gap: 10,
   },
   tab: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    flexDirection: "row",
+    gap: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     borderRadius: 5,
+    backgroundColor: "#e4e4e4",
   },
-  selectedTab: {
-    backgroundColor: "#007bff",
+  allTab: {
+    backgroundColor: "#c4eeff",
+  },
+  checkedInTab: {
+    backgroundColor: "#dfffcc",
+  },
+  checkedText: {
+    color: "#6cd153",
+  },
+  pendingTab: {
+    backgroundColor: "#c4eeff",
+  },
+  pendingText: {
+    color: "#446fff",
   },
   tabText: {
-    color: "#007bff",
+    color: "#9b9b9b",
     fontWeight: "bold",
   },
   selectedTabText: {
@@ -226,9 +246,6 @@ const styles = StyleSheet.create({
   },
   orderNoText: {
     color: "gray",
-  },
-  scrollContainer: {
-    paddingBottom: 20,
   },
 });
 

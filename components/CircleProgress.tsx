@@ -2,25 +2,21 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Circle } from "react-native-progress";
 
-const CircleProgress = ({
-  progress,
-  total,
-}: {
-  progress: number;
-  total: number;
-}) => {
+const CircleProgress = ({ progress, total }: any) => {
   return (
     <View style={styles.container}>
       <Circle
         size={120}
         progress={progress / total}
         thickness={10}
-        color="#3b5998"
+        color="#007AFF"
+        unfilledColor="#E0E0E0"
+        borderWidth={0}
+        showsText={true}
+        textStyle={styles.progressText}
+        formatText={() => `${progress}`}
       />
-      <View style={styles.textContainer}>
-        <Text style={styles.progressText}>{progress}</Text>
-        <Text style={styles.totalText}>{`/${total}`}</Text>
-      </View>
+      <Text style={styles.totalText}>{`${progress}/${total}`}</Text>
     </View>
   );
 };
@@ -28,11 +24,7 @@ const CircleProgress = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-  },
-  textContainer: {
-    position: "absolute",
     justifyContent: "center",
-    alignItems: "center",
   },
   progressText: {
     fontSize: 24,
@@ -41,6 +33,8 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 16,
     color: "gray",
+    position: "absolute",
+    bottom: 20,
   },
 });
 
