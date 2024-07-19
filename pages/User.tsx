@@ -32,45 +32,74 @@ interface ItemProps {
   onPress?(): void;
 }
 
-const Profile01 = ({ navigation }: any) => {
+const UserProfile = ({ navigation }: any) => {
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const { height, width, top, bottom } = useLayout();
   const styles = useStyleSheet(themedStyles);
   const [userData, setUserData] = useState<any>([]);
   const [isPremium] = useToggle(true);
+  const [token, setToken] = useState("");
 
   const checkUser = async () => {
     const userData = await AsyncStorage.getItem("userData");
     if (userData !== null) {
       const data = JSON.parse(userData);
       setUserData(data.data);
+      setToken(data.data.token);
     }
+  };
+
+  const logout = async () => {
+    const apiLogout = "https://pruebatu.com/api/v2/logout";
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    await fetch(apiLogout, options);
+    await AsyncStorage.clear();
+    navigation.navigate("Login");
   };
 
   useEffect(() => {
     checkUser();
   }, []);
 
-  const RenderItem = React.useCallback(({ item, onPress }: ItemProps) => {
-    return (
-      <TouchableOpacity activeOpacity={0.7}>
-        <Layout style={styles.item} level="2">
-          <View style={styles.itemText}>
-            <View style={[styles.icon, { backgroundColor: item.color }]}>
-              <Icon pack="assets" name={item.icon} style={styles.titColor} />
+  const RenderItem = React.useCallback(
+    ({ item, onPress }: ItemProps) => {
+      const handlePress = () => {
+        if (item.title === "Idioma") {
+          navigation.navigate("Language");
+        }
+      };
+
+      return (
+        <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
+          <Layout style={styles.item} level="2">
+            <View style={styles.itemText}>
+              <View style={[styles.icon, { backgroundColor: item.color }]}>
+                <Icon pack="assets" name={item.icon} style={styles.titColor} />
+              </View>
+              <Text
+                marginTop={23}
+                marginLeft={8}
+                children={item.title}
+                category="callout"
+              />
             </View>
-            <Text
-              marginTop={23}
-              marginLeft={8}
-              children={item.title}
-              category="callout"
+            <Icon
+              pack="assets"
+              name={"arrow_right"}
+              style={[styles.titColor]}
             />
-          </View>
-          <Icon pack="assets" name={"arrow_right"} style={[styles.titColor]} />
-        </Layout>
-      </TouchableOpacity>
-    );
-  }, []);
+          </Layout>
+        </TouchableOpacity>
+      );
+    },
+    [navigation]
+  );
 
   return (
     <Container style={styles.container}>
@@ -115,16 +144,13 @@ const Profile01 = ({ navigation }: any) => {
         onClose={() => {
           setShowAlertDialog(false);
         }}
-        logout={async () => {
-          await AsyncStorage.clear();
-          navigation.navigate("Login");
-        }}
+        logout={logout}
       />
     </Container>
   );
 };
 
-export default Profile01;
+export default UserProfile;
 
 const themedStyles = StyleService.create({
   container: {

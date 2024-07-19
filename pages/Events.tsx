@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventsLive from "../components/EventsLive";
 import EventsPast from "../components/EventsPast";
 import { Avatar, VStack, HStack, Icon, Pressable } from "@gluestack-ui/themed";
 import { User } from "lucide-react-native";
 import { Tab, TabView } from "@rneui/themed";
+// import i18n from "../hooks/i18n";
 
 interface EventData {
   event_name: string;
@@ -80,11 +74,10 @@ export default function Events({ navigation }: any) {
       return <Text>No hay datos disponibles.</Text>;
     }
     return data.map((item, index) => (
-      <Component
-        item={item}
-        index={index}
-        navigation={navigation}
-      />
+      <View>
+        {/* <Text>{i18n.t('welcome')}</Text> */}
+        <Component item={item} index={index} navigation={navigation} />
+      </View>
     ));
   };
 

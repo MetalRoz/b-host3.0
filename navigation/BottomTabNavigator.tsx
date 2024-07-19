@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Dashboard from "../pages/Dashboard";
 import Orders from "../pages/Orders";
-import Profile01 from "../pages/User";
+import UserProfile from "../pages/User";
 import { Icon } from "@gluestack-ui/themed";
 import {
   LayoutDashboardIcon,
@@ -44,11 +44,12 @@ const MyTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Icon as={ScrollTextIcon} color={color} size="xl" />
           ),
+          headerShown: false
         }}
       />
       <Tab.Screen
         name="Ajustes"
-        component={Profile01}
+        component={UserProfile}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon as={Settings} color={color} size="xl" />

@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import {
   VStack,
   HStack,
   Box,
   Card,
   Heading,
-  Link,
-  LinkText,
   Icon,
-  ArrowRightIcon,
   Text,
   ArrowLeftIcon,
   Spinner,
 } from "@gluestack-ui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventsCard from "../components/EventsCard";
-import { CircularProgressBar } from "@ui-kitten/components";
 import CircleProgress from "../components/CircleProgress";
 
 const Dashboard = ({ navigation }: any) => {
@@ -64,7 +60,7 @@ const Dashboard = ({ navigation }: any) => {
   return (
     <VStack style={styles.container} space="3xl">
       <Box style={styles.circleProgressContainer}>
-        <Card p="$5" borderRadius="$lg" minWidth={300} m="$3">
+        <Card p="$5" borderRadius="$lg" minWidth={370} m="$3">
           <HStack style={{ marginBottom: 20 }}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Icon style={{ padding: 10 }} size="xl" as={ArrowLeftIcon}></Icon>

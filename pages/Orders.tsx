@@ -1,5 +1,5 @@
 import { Icon } from "@gluestack-ui/themed";
-import { QrCodeIcon, TimerIcon } from "lucide-react-native";
+import { QrCodeIcon, SearchIcon, TimerIcon } from "lucide-react-native";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -94,6 +94,13 @@ const OrderScreen = () => {
 
   return (
     <View style={styles.container}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar Evento"
+          placeholderTextColor="#888"
+          value={search}
+          onChangeText={setSearch}
+        />
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={[styles.tab, selectedTab === "All" && styles.allTab]}
@@ -154,18 +161,25 @@ const OrderScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search"
-        value={search}
-        onChangeText={setSearch}
-      />
       <FlatList data={filteredData} renderItem={renderItem} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+
+
+  searchInput: {
+    backgroundColor: "#f3f3f3",
+    borderRadius: 25,
+    padding: 10,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    margin: 10,
+    marginTop: 50,
+    marginBottom: 10,
+
+  },
   tabContainer: {
     flexDirection: "row",
     paddingHorizontal: 10,
@@ -220,15 +234,7 @@ const styles = StyleSheet.create({
   orderContainer: {
     flexDirection: "column",
   },
-  searchBar: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginHorizontal: 10,
-    marginBottom: 10,
-  },
+
   itemContainer: {
     padding: 15,
     borderBottomWidth: 1,
