@@ -4,7 +4,6 @@ import { Layout, StyleService, useStyleSheet } from "@ui-kitten/components";
 import { Container, Content, Text } from "../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Image, TouchableOpacity } from "react-native";
-import { Heading } from "@gluestack-ui/themed";
 
 const EventsPast = React.memo(({ item, index, navigation }: any) => {
   const styles = useStyleSheet(themedStyles);
@@ -26,9 +25,7 @@ const EventsPast = React.memo(({ item, index, navigation }: any) => {
               style={styles.img}
             />
             <View>
-              <Heading size="xs" isTruncated={true} style={styles.test}>
-                {item.event_name}
-              </Heading>
+              <Text style={styles.test}>{item.event_name}</Text>
               <View style={styles.times}>
                 <Text
                   status="platinum"
@@ -87,6 +84,5 @@ const themedStyles = StyleService.create({
   },
   content: {
     paddingHorizontal: 8,
-    paddingBottom: 20,
   },
 });

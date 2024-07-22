@@ -112,6 +112,8 @@ export const Icons = {
   tote: require("./ic_tote.png"),
   coffe: require("./ic_coffe.png"),
   sun: require("./ic_sun.png"),
+  sun2x: require("./ic_sun2x.png"),
+  sunny: require("./sunny.png"),
   eye_glash: require("./ic_eye_glash.png"),
   undo: require("./ic_undo.png"),
   redo: require("./ic_redo.png"),

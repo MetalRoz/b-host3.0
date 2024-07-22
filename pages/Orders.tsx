@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Container, Text as TextComponent } from "../components";
 
 const OrderScreen = () => {
   const [search, setSearch] = useState("");
@@ -72,13 +73,13 @@ const OrderScreen = () => {
   };
 
   const renderItem = ({ item }: any) => (
-    <View style={styles.itemContainer}>
+    <Container style={styles.itemContainer}>
       <View style={styles.orderContainer}>
-        <Text style={styles.nameText}>
+        <TextComponent style={styles.nameText}>
           {item.ot_f_name + " " + (item.ot_l_name || "")}
-        </Text>
-        <Text style={styles.emailText}>{item.ot_email}</Text>
-        <Text style={styles.orderNoText}>Order no: {item.order_id}</Text>
+        </TextComponent>
+        <TextComponent style={styles.emailText}>{item.ot_email}</TextComponent>
+        <TextComponent style={styles.orderNoText}>Order no: {item.order_id}</TextComponent>
       </View>
       {item.ot_status === 0 ? (
         <View style={styles.iconClock}>
@@ -89,18 +90,18 @@ const OrderScreen = () => {
           <Icon as={QrCodeIcon} color="$green600" />
         </View>
       )}
-    </View>
+    </Container>
   );
 
   return (
-    <View style={styles.container}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Buscar Evento"
-          placeholderTextColor="#888"
-          value={search}
-          onChangeText={setSearch}
-        />
+    <Container >
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Buscar Evento"
+        placeholderTextColor="#888"
+        value={search}
+        onChangeText={setSearch}
+      />
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={[styles.tab, selectedTab === "All" && styles.allTab]}
@@ -122,20 +123,20 @@ const OrderScreen = () => {
           ]}
           onPress={() => setSelectedTab("Checked In")}
         >
+          <Icon
+            as={QrCodeIcon}
+            size="sm"
+            style={[
+              styles.tabText,
+              selectedTab === "Checked In" && styles.checkedText,
+            ]}
+          />
           <Text
             style={[
               styles.tabText,
               selectedTab === "Checked In" && styles.checkedText,
             ]}
           >
-            <Icon
-              as={QrCodeIcon}
-              size="sm"
-              style={[
-                styles.tabText,
-                selectedTab === "Checked In" && styles.checkedText,
-              ]}
-            />
             Checked In
           </Text>
         </TouchableOpacity>
@@ -143,32 +144,30 @@ const OrderScreen = () => {
           style={[styles.tab, selectedTab === "Pending" && styles.pendingTab]}
           onPress={() => setSelectedTab("Pending")}
         >
+          <Icon
+            as={TimerIcon}
+            size="sm"
+            style={[
+              styles.tabText,
+              selectedTab === "Pending" && styles.pendingText,
+            ]}
+          />
           <Text
             style={[
               styles.tabText,
               selectedTab === "Pending" && styles.pendingText,
             ]}
           >
-            <Icon
-              as={TimerIcon}
-              size="sm"
-              style={[
-                styles.tabText,
-                selectedTab === "Pending" && styles.pendingText,
-              ]}
-            />
             Pending
           </Text>
         </TouchableOpacity>
       </View>
       <FlatList data={filteredData} renderItem={renderItem} />
-    </View>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-
-
   searchInput: {
     backgroundColor: "#f3f3f3",
     borderRadius: 25,
@@ -178,7 +177,6 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 50,
     marginBottom: 10,
-
   },
   tabContainer: {
     flexDirection: "row",
@@ -187,12 +185,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   tab: {
+    gap: 3,
     flexDirection: "row",
-    gap: 5,
     paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 5,
     backgroundColor: "#e4e4e4",
+    alignItems: "center"
   },
   allTab: {
     backgroundColor: "#c4eeff",

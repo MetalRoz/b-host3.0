@@ -141,6 +141,8 @@ const AssetsIconsPack: IconPack<ImageProps | SvgProps> = {
     tote: createIcon(Icons.tote),
     coffe: createIcon(Icons.coffe),
     sun: createIcon(Icons.sun),
+    sun2x: createIcon(Icons.sun2x),
+    sunny: createIcon(Icons.sunny),
     eye_glash: createIcon(Icons.eye_glash),
     undo: createIcon(Icons.undo),
     redo: createIcon(Icons.redo),

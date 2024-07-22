@@ -10,7 +10,7 @@ import Language from "../pages/Language";
 
 const Stack = createNativeStackNavigator();
 
-const AppNavigator = () => {
+const AppNavigator = ({ toggleMode }: any) => {
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
 
   useEffect(() => {
@@ -44,10 +44,20 @@ const AppNavigator = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Events" component={Events} />
-        <Stack.Screen name="User" component={UserProfile} />
-        <Stack.Screen name="Dashboard" component={BottomTabNavigator} />
-        <Stack.Screen name="Language" component={Language} options={{ title: "Language Settings",headerShown: true}} />
+        <Stack.Screen name="Events">
+          {(props) => <Events {...props} toggleMode={toggleMode} />}
+        </Stack.Screen>
+        <Stack.Screen name="User">
+          {(props) => <UserProfile {...props} toggleMode={toggleMode} />}
+        </Stack.Screen>
+        <Stack.Screen name="Dashboard">
+          {(props) => <BottomTabNavigator {...props} toggleMode={toggleMode} />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Language"
+          component={Language}
+          options={{ title: "Language Settings", headerShown: true }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

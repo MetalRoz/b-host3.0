@@ -32,8 +32,9 @@ interface ItemProps {
   onPress?(): void;
 }
 
-const UserProfile = ({ navigation }: any) => {
+const UserProfile = ({ navigation, toggleMode }: any) => {
   const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [mode, setMode] = useState("light"); // Default mode
   const { height, width, top, bottom } = useLayout();
   const styles = useStyleSheet(themedStyles);
   const [userData, setUserData] = useState<any>([]);
@@ -47,6 +48,11 @@ const UserProfile = ({ navigation }: any) => {
       setUserData(data.data);
       setToken(data.data.token);
     }
+  };
+
+  const checkMode = async () => {
+    const modeStorage = await AsyncStorage.getItem("mode");
+    setMode(modeStorage || "light");
   };
 
   const logout = async () => {
@@ -65,13 +71,22 @@ const UserProfile = ({ navigation }: any) => {
 
   useEffect(() => {
     checkUser();
+    checkMode();
   }, []);
+
+  const handleModeToggle = async () => {
+    await toggleMode();
+    await checkMode(); // Update mode after toggling
+  };
 
   const RenderItem = React.useCallback(
     ({ item, onPress }: ItemProps) => {
-      const handlePress = () => {
-        if (item.title === "Idioma") {
+      const handlePress = async () => {
+        if (item.title === "Idiomas") {
           navigation.navigate("Language");
+        }
+        if (item.title === "Modo noche" || item.title === "Modo día") {
+          await handleModeToggle();
         }
       };
 
@@ -98,8 +113,35 @@ const UserProfile = ({ navigation }: any) => {
         </TouchableOpacity>
       );
     },
-    [navigation]
+    [navigation, handleModeToggle]
   );
+
+  const DATA_Profile01 = [
+    {
+      id: 1,
+      icon: "shield",
+      title: "Privacidad",
+      color: "#949398",
+    },
+    {
+      id: 2,
+      icon: "info2x",
+      title: "Terminos",
+      color: "#949398",
+    },
+    {
+      id: 3,
+      icon: "global",
+      title: "Idiomas",
+      color: "#949398",
+    },
+    {
+      id: 4,
+      icon: mode === "light" ? "moon" : "sunny",
+      title: mode === "light" ? "Modo noche" : "Modo día",
+      color: mode === "light" ? "#215190" : "#d6b600", // Yellow color for light mode
+    },
+  ];
 
   return (
     <Container style={styles.container}>
@@ -212,30 +254,3 @@ const themedStyles = StyleService.create({
     marginTop: 24,
   },
 });
-
-const DATA_Profile01 = [
-  {
-    id: 1,
-    icon: "shield",
-    title: "Privacidad",
-    color: "#949398",
-  },
-  {
-    id: 2,
-    icon: "info2x",
-    title: "Terminos",
-    color: "#949398",
-  },
-  {
-    id: 3,
-    icon: "global",
-    title: "Idioma",
-    color: "#949398",
-  },
-  {
-    id: 4,
-    icon: "moon",
-    title: "Modo noche",
-    color: "#215190",
-  },
-];

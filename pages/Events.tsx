@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventsLive from "../components/EventsLive";
 import EventsPast from "../components/EventsPast";
-import { Avatar, VStack, HStack, Icon, Pressable } from "@gluestack-ui/themed";
+import { Avatar, Icon, Pressable } from "@gluestack-ui/themed";
 import { User } from "lucide-react-native";
 import { Tab, TabView } from "@rneui/themed";
-// import i18n from "../hooks/i18n";
+import { Container, Content, VStack, HStack } from "../components";
 
 interface EventData {
   event_name: string;
@@ -16,13 +16,14 @@ interface EventData {
   event_unique_id: any;
 }
 
-export default function Events({ navigation }: any) {
+export default function Events({ navigation, toggleMode }: any) {
   const [liveData, setLiveData] = useState<EventData[]>([]);
   const [pastData, setPastData] = useState<EventData[]>([]);
   const apiEventsLive = "https://pruebatu.com/api/v2/event/live";
   const apiEventsPast = "https://pruebatu.com/api/v2/event/past";
   const [index, setIndex] = useState(0);
   const [token, setToken] = useState("");
+  const [mode, setMode] = useState<any>("light");
 
   const fetchEvents = async (
     apiUrl: string,
@@ -49,15 +50,17 @@ export default function Events({ navigation }: any) {
 
   const checkToken = async () => {
     const storage = await AsyncStorage.getItem("userData");
+    const modeStorage = await AsyncStorage.getItem("mode");
     if (storage !== null) {
       const token = JSON.parse(storage).data.token;
       setToken(token);
     }
+    setMode(modeStorage);
   };
 
   useEffect(() => {
     checkToken();
-  }, []);
+  }, [toggleMode]);
 
   useEffect(() => {
     if (token) {
@@ -74,23 +77,27 @@ export default function Events({ navigation }: any) {
       return <Text>No hay datos disponibles.</Text>;
     }
     return data.map((item, index) => (
-      <View>
-        {/* <Text>{i18n.t('welcome')}</Text> */}
+      <Container>
         <Component item={item} index={index} navigation={navigation} />
-      </View>
+      </Container>
     ));
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <Container>
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: mode === "light" ? "#1976D2" : "#222B45" }, // Ajusta el color para modo oscuro
+        ]}
+      >
         <TextInput
           style={styles.searchInput}
           placeholder="Buscar Evento"
           placeholderTextColor="#888"
         />
-        <VStack space="2xl">
-          <HStack space="md">
+        <VStack>
+          <HStack>
             <Pressable
               onPress={() => navigation.navigate("User", { test: 123 })}
             >
@@ -106,18 +113,24 @@ export default function Events({ navigation }: any) {
           value={index}
           onChange={(e) => setIndex(e)}
           indicatorStyle={{
-            backgroundColor: "#1976D2",
+            backgroundColor: mode === "light" ? "#1976D2" : "white",
             height: 3,
           }}
           variant="default"
         >
           <Tab.Item
             title="Próximos Eventos"
-            titleStyle={{ fontSize: 13, color: "black" }}
+            titleStyle={{
+              fontSize: 13,
+              color: mode === "light" ? "black" : "white",
+            }}
           />
           <Tab.Item
             title="Eventos Pasados"
-            titleStyle={{ fontSize: 13, color: "black" }}
+            titleStyle={{
+              fontSize: 13,
+              color: mode === "light" ? "black" : "white",
+            }}
           />
         </Tab>
 
@@ -134,7 +147,7 @@ export default function Events({ navigation }: any) {
           </TabView.Item>
         </TabView>
       </>
-    </View>
+    </Container>
   );
 }
 
@@ -142,12 +155,8 @@ const styles = StyleSheet.create({
   tabBar: {
     paddingHorizontal: 16,
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#F5F5F5",
-  },
+
   header: {
-    backgroundColor: "#1976D2",
     padding: 10,
     paddingTop: 40,
     display: "flex",

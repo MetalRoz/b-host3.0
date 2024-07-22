@@ -7,13 +7,13 @@ import {
   Card,
   Heading,
   Icon,
-  Text,
   ArrowLeftIcon,
   Spinner,
 } from "@gluestack-ui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventsCard from "../components/EventsCard";
 import CircleProgress from "../components/CircleProgress";
+import { Container, Text } from "../components";
 
 const Dashboard = ({ navigation }: any) => {
   const [data, setData] = useState<any>(null);
@@ -58,6 +58,7 @@ const Dashboard = ({ navigation }: any) => {
   }
 
   return (
+    <Container>
     <VStack style={styles.container} space="3xl">
       <Box style={styles.circleProgressContainer}>
         <Card p="$5" borderRadius="$lg" minWidth={370} m="$3">
@@ -91,6 +92,7 @@ const Dashboard = ({ navigation }: any) => {
         ))}
       </ScrollView>
     </VStack>
+    </Container>
   );
 };
 
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: "white",
+
   },
   title: {
     fontSize: 24,
