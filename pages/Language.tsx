@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import i18n from "../hooks/i18n";
 import { LanguageManager } from "../hooks/languageManager";
+import { Container, Text } from "../components";
 
 const Language = ({ navigation }: any) => {
   const [selectedLanguage, setSelectedLanguage] = useState("en");
@@ -21,7 +22,7 @@ const Language = ({ navigation }: any) => {
   };
 
   return (
-    <View style={styles.container}>
+    <Container style={styles.container}>
       <View style={styles.languageOption}>
         <TouchableOpacity
           style={styles.radioButton}
@@ -44,14 +45,14 @@ const Language = ({ navigation }: any) => {
           <Text style={styles.radioText}>{i18n.t("spanish")}</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+
     padding: 20,
   },
   languageOption: {
@@ -81,7 +82,6 @@ const styles = StyleSheet.create({
   },
   radioText: {
     fontSize: 16,
-    color: "#444",
   },
 });
 
